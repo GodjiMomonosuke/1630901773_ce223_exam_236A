@@ -5,22 +5,22 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <link rel="stylesheet" href="styles.css">
     <title>โดนแดกออนไลน์</title>
 </head>
 <body>
     <h1>DonDak Online</h1>   
     <a href="/addnumber">addnumber</a>
-
+    <a href="/showbyid">showbyid</a>
     <div class="search-container">
-        <form action="" method="post">
+        <form action="showbyid.ejs" method="get">
             <input type="text" placeholder="Search.." name="search">
             <button type="submit">Submit</button>
         </form>
     </div>
 
-
-    <table id=”table”>
+    <div class="table-id">
+     <table id=”table”>
         <tr>
             <th>id</th>
             <th>date</th>
@@ -38,7 +38,8 @@
         </tr>
         <% }) %>
     </table>
-
-
+    
+    <a href="/credit">Credit</a>
+    </div>
 </body>
 </html>

@@ -18,6 +18,8 @@ const pool = mysql.createPool({
     database : 'lotto' 
 })
 
+app.use(express.static('public'))
+
 //view
 app.set('view engine','ejs')
 
@@ -26,6 +28,11 @@ var obj = {}
 app.get('/addnumber',(req, res) => {   
     res.render('addnumber')
 })
+
+app.get('/credit',(req, res) => {
+    res.render('credit')
+})
+
 
 app.get('/delete',(re1, res) => {
     pool.getConnection((err, connection) =>{
@@ -68,25 +75,44 @@ app.get('',(req, res) => {
     })
 })
  
-app.get('/:id',(req, res) => {
+app.get('/:number',(req, res) => {
  
     pool.getConnection((err, connection) => { 
         if(err) throw err
-        console.log("connected id : ?" ,connection.threadId)
+        console.log("connected number : ?" ,connection.threadId)
         //console.log(`connected id : ${connection.threadId}`)
  
-        connection.query('SELECT * FROM lottery WHERE `id` = ?', req.params.id, (err, rows) => { 
+        connection.query('SELECT * FROM lottery WHERE `number` = ?', req.params.number, (err, rows) => { 
             connection.release();
             if(!err){ //ถ้าไม่ error จะใส่ในตัวแปร rows
                 //res.send(rows)
                 obj = {lottery : rows, Error, err}               
                 res.render('showbyid', obj)
 
-
             } else {
                 console.log(err)
             }
          }) 
+    })
+})
+
+app.get('//:number',(req, res) => {
+
+    pool.getConnection((err, connection) =>{ //err คือ connect ไม่ได้ or connection คือ connect ได้บรรทัดที่ 13-19
+        if(err) throw err
+        console.log("connected id : ?", connection.threadId) //ให้ print บอกว่า Connect ได้ไหม
+        //console.log(`connected id : ${connection.threadId}`)  //ต้องใช้ ` อยู่ตรงที่เปลี่ยนภาษา
+
+        //แก้ไขคำสั่ง SQL
+        connection.query('SELECT * FROM lottery WHERE `number`= ? ', [req.params.number], (err, rows) => {
+            connection.release();
+            if(!err){ 
+                obj = {lottery : rows, Error, err}
+                res.render('getnumber', obj)
+            } else {
+                console.log(err)
+            }
+        })
     })
 })
 

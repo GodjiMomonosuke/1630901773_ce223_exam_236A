@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400&display=swap');
+
+/* All class using name dataset */
+:root{
+    /* Define Variables */
+    --accent : #FF0000; /* Button color */
+    --accentHover : #FF9A9A; /* mouse hover */
+    --dark60 : rgba(243, 243, 243, 0.6); /* 0.6 = 60% */
+    --light : #FFFFFF;
+    --transition : all 0.3s ease 0s /* delay time */
+}
+
+/* All section */
+*{
+    /* Clear margin and padding */
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body{
+    height: 100%; /* Fixed height using scroll*/
+    overflow: auto;
+}
+
+body{
+    
+    background-color: bisque;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover; /* fixed scale screen*/
+    text-align: center;
+    font-size: xx-large;
+}
+
+a{
+    text-decoration: none;
+}
+
+a, button, p{
+    font-family: "Oswald", sans-serif;
+    color:#FF0000;
+}
+
+a, button, .logo{
+    cursor: pointer;
+}
+
+main{
+    height: 100;
+    display: grid;
+    grid-template-columns: minmax(60px, 1fr) repeat(6, minmax(50px, 190px))
+    minmax(60px, 1fr); 
+}
+
+header{
+    grid-column: 1 / span 7;
+    margin-left: 5%;
+}
+
+input{
+    font-size: 20px;
+}
+
+button{
+    font-size: 27px;
+    padding: 6px;
+    margin-top: 10px;
+}
+
+p{
+    color: black;
+}
