@@ -1,4 +1,3 @@
-//Open Call Express 
 const express = require('express')
 const bodyParser = require('body-parser')
  
@@ -9,28 +8,26 @@ const port = process.env.PORT || 5000;
  
 app.use(bodyParser.json())
  
-//MySQL Connect phpMyAdmin
+
 const pool = mysql.createPool({
     connectionLimit : 10,
     connectionTimeout : 20,
-    host : 'localhost', //www.google.com/sql or Server IP Address
+    host : 'localhost', 
     user : 'root',
     password : '',
-    database : 'lotto' //Connect Database from beers.sql (Import to phpMyAdmin)
+    database : 'lotto' 
 })
  
-//GET (เรียกข้อมูลขึ้นมาดู) | POST (ส่งข้อมูลหน้า Website กลับเข้ามา)
-//GET All Beers (beers.sql)
+
 app.get('',(req, res) => {
  
-    pool.getConnection((err, connection) => {  //err คือ connect ไม่ได้ or connection คือ connect ได้ บรรทัดที่ 13-20
+    pool.getConnection((err, connection) => {  
         if(err) throw err
-        console.log("connected id : ?" ,connection.threadId) //ให้ print บอกว่า Connect ได้ไหม
-        //console.log(`connected id : ${connection.threadId}`) //ต้องใช้ ` อยู่ตรงที่เปลี่ยนภาษา ใช้ได้ทั้ง 2 แบบ
+        console.log("connected id : ?" ,connection.threadId)
          
         connection.query('SELECT * FROM lottery', (err, rows) => { 
             connection.release();
-            if(!err){ //ถ้าไม่ error จะใส่ในตัวแปร rows
+            if(!err){ 
                 //console.log(rows)
                 //res.json(rows)
                 res.send(rows)
@@ -41,14 +38,12 @@ app.get('',(req, res) => {
     })
 })
  
-//Copy บรรทัดที่ 24 - 42 มาปรับแก้ Code ใหม่
-//สร้างหน้าย่อย ดึงข้อมูลเฉพาะ id ที่ต้องการ คือ 123, 124, 125
 app.get('/:id',(req, res) => {
  
-    pool.getConnection((err, connection) => {  //err คือ connect ไม่ได้ or connection คือ connect ได้ บรรทัดที่ 13-20
+    pool.getConnection((err, connection) => { 
         if(err) throw err
-        console.log("connected id : ?" ,connection.threadId) //ให้ print บอกว่า Connect ได้ไหม
-        //console.log(`connected id : ${connection.threadId}`) //ต้องใช้ ` อยู่ตรงที่เปลี่ยนภาษา ใช้ได้ทั้ง 2 แบบ
+        console.log("connected id : ?" ,connection.threadId)
+        //console.log(`connected id : ${connection.threadId}`)
  
         connection.query('SELECT * FROM lottery WHERE `id` = ?', req.params.id, (err, rows) => { 
             connection.release();
@@ -58,6 +53,42 @@ app.get('/:id',(req, res) => {
                 console.log(err)
             }
          }) 
+    })
+})
+
+//(1)POST --> req รับข้อมูลมาจากหน้าเว็บ, res จะส่งข้อมูลกลับไปยังหน้าเว็บ
+//ใช้คำสั่ง bodyParser.urlencoded เพื่อทำให้สามารถรับข้อมูล x-www-form-urlencoded ทดสอบด้วย Postman ลงฐานข้อมูลได้
+app.use(bodyParser.urlencoded({extended: false})) 
+//สร้าง Path ของเว็บไซต์ additem
+app.post('/addnumber',(req, res) => {
+    pool.getConnection((err, connection) => { //pool.getConnection สำหรับใช้เชื่อมต่อกับ Database 
+        if(err) throw err
+            const params = req.body
+                connection.query('INSERT INTO lottery SET ?', params, (err, rows) => {
+                    connection.release()
+                    if(!err){
+                        res.send(`${params.number} is complete adding item. `)
+                    }else {
+                        console.log(err)
+                        }
+                    })           
+                })
+            })
+
+//(2)DELETE
+app.delete('/delete/:id',(req, res) => {
+    pool.getConnection((err, connection) =>{
+        if(err) throw err
+        console.log("connected id : ?", connection.threadId)
+        //ลบข้อมูลโดยใช้ id
+        connection.query('DELETE FROM `lottery` WHERE `lottery`.`id` = ?', [req.params.id], (err, rows) => {
+            connection.release();
+            if(!err){ 
+                res.send(`${[req.params.id]} is complete delete item. `) 
+            } else {
+                console.log(err)
+            }
+        })
     })
 })
  
