@@ -1,0 +1,25 @@
+{
+  "name": "1630901773_ce223_exam_236a",
+  "version": "1.0.0",
+  "description": "",
+  "main": "nodejs_sql.js",
+  "scripts": {
+    "start": "nodemon nodejs_sql.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GodjiMomonosuke/1630901773_ce223_exam_236A.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GodjiMomonosuke/1630901773_ce223_exam_236A/issues"
+  },
+  "homepage": "https://github.com/GodjiMomonosuke/1630901773_ce223_exam_236A#readme",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "express": "^4.18.1",
+    "mysql": "^2.18.1"
+  }
+}
