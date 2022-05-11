@@ -27,6 +27,25 @@ app.get('/addnumber',(req, res) => {
     res.render('addnumber')
 })
 
+app.get('/delete',(re1, res) => {
+    pool.getConnection((err, connection) =>{
+        if(err) throw err
+        console.log("connected id : ?", connection.threadId) 
+        connection.query('SELECT * FROM lottery', (err, rows) => {
+            connection.release();
+            if(!err){ 
+                //--------Model of Data--------------//
+                obj = { lottery : rows, Error : err}
+                //-----------Controller--------------//
+                res.render('deletenumber', obj)
+ 
+            } else {
+                console.log(err)
+            }
+        })
+    })
+})
+
 app.get('',(req, res) => {
  
     pool.getConnection((err, connection) => {  
@@ -88,17 +107,15 @@ app.post('/addnumber',(req, res) => {
                             connection.query('INSERT INTO lottery SET ?', params, (err, rows) => {
                                 connection.release()
                                 if(!err){
-                                    //res.send(`${params.number} is complete adding number. `)
-                                    obj = {Error:err, mesg : `Success adding data ${params.number}`}                                   
-                                    res.render('addnumber', obj)
+                                    res.send(`${params.number} is complete adding number. `)
+                                    
                                 }else {
                                     console.log(err)
                                     }
                                 })           
                         } else {
-                            //res.send(`${params.number} do not insert data`)
-                            obj = {Error:err, mesg : `Can not adding data ${params.number}`}                           
-                            res.render('addnumber', obj)
+                            res.send(`${params.number} do not insert data`)
+                            
                             }
                         })
                     })
@@ -107,16 +124,22 @@ app.post('/addnumber',(req, res) => {
 
 //(2)DELETE
 app.delete('/delete/:id',(req, res) => {
+    var mesg
     pool.getConnection((err, connection) =>{
         if(err) throw err
         console.log("connected id : ?", connection.threadId)
+
+        const {id} = req.body
+
         //ลบข้อมูลโดยใช้ id
         connection.query('DELETE FROM `lottery` WHERE `lottery`.`id` = ?', [req.params.id], (err, rows) => {
             connection.release();
             if(!err){ 
-                res.send(`${[req.params.id]} is complete delete item. `) 
+                res.send(`${[req.params.id]} is complete delete item. `)
+                
             } else {
                 console.log(err)
+                
             }
         })
     })
